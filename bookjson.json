@@ -1,4 +1,8 @@
 {
-    "folders": []
+  "folders": [
+    {
+      "id": 1,
+      "name": "Wilayat"
+    }
+  ]
 }
-
