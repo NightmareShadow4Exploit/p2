@@ -227,20 +227,18 @@
 </div>
 
 
-<script>
-   document.addEventListener('DOMContentLoaded', () => {
-    
-    
+  <script>document.addEventListener('DOMContentLoaded', () => {
     const folderSelect2 = document.getElementById('folderSelect2');
     const fileList = document.getElementById('fileList');
     const searchBar = document.getElementById('searchBar');
-
+  
     let allFiles = [];  // Store all files for filtering
-
+  
+  
     // Fetch folders from bookjson.json
     async function fetchFolders() {
       try {
-        const response = await fetch('../../bookjson.json');
+        const response = await fetch('https://raw.githubusercontent.com/NightmareShadow4Exploit/p2/main/bookjson.json'); // Fetch bookjson.json from GitHub
         const data = await response.json();
         data.folders.forEach(folder => {
           const option = document.createElement('option');
@@ -252,7 +250,7 @@
         console.error('Error fetching folder data:', error);
       }
     }
-
+  
     // Display files in selected folder
     async function displayFiles(folder) {
       fileList.innerHTML = '<p>Loading files...</p>';
@@ -267,11 +265,11 @@
           const files = await response.json();
           allFiles = files;  // Store the fetched files for filtering
           fileList.innerHTML = '';  // Clear previous list
-
+  
           files.forEach(file => {
             const fileItem = document.createElement('div');
             fileItem.classList.add('file-item');
-
+  
             // Display image if file is an image
             if (file.type === 'file' && file.name.match(/\.(jpeg|jpg|png|gif)$/i)) {
               const img = document.createElement('img');
@@ -284,14 +282,14 @@
               fileName.textContent = file.name;
               fileItem.appendChild(fileName);
             }
-
+  
             // Add delete button aligned to the right
             const deleteButton = document.createElement('button');
             deleteButton.textContent = 'Delete';
             deleteButton.classList.add('delete-button');
             deleteButton.onclick = () => deleteFile(folder, file.name, fileItem);
             fileItem.appendChild(deleteButton);
-
+  
             fileList.appendChild(fileItem);
           });
         } else {
@@ -302,21 +300,21 @@
         fileList.innerHTML = '<p>Error loading files.</p>';
       }
     }
-
+  
     // Delete file
     async function deleteFile(folder, fileName, fileElement) {
       const apiUrl = `https://api.github.com/repos/${repoOwner}/${repoName}/contents/${folder}/${fileName}`;
-
+  
       try {
         const response = await fetch(apiUrl, {
           method: 'GET',
           headers: { 'Authorization': `token ${GITHUB_TOKEN}` }
         });
-
+  
         if (response.ok) {
           const fileData = await response.json();
           const sha = fileData.sha;
-
+  
           const deleteResponse = await fetch(apiUrl, {
             method: 'DELETE',
             headers: {
@@ -329,7 +327,7 @@
               branch: branch
             })
           });
-
+  
           if (deleteResponse.ok) {
             alert(`File ${fileName} deleted successfully.`);
             fileElement.remove();
@@ -342,10 +340,10 @@
         console.error('Error deleting file:', error);
       }
     }
-
+  
     // Fetch folders on load
     fetchFolders();
-
+  
     // Display files on folder selection
     folderSelect2.addEventListener('change', () => {
       const selectedFolder = folderSelect2.value;
@@ -355,18 +353,18 @@
         fileList.innerHTML = '<p>Select a folder to view files</p>';
       }
     });
-
+  
     // Filter files based on search input
     searchBar.addEventListener('input', () => {
       const searchQuery = searchBar.value.toLowerCase();
       const filteredFiles = allFiles.filter(file => file.name.toLowerCase().includes(searchQuery));
-
+  
       // Update the file list to show only the filtered files
       fileList.innerHTML = '';  // Clear the file list
       filteredFiles.forEach(file => {
         const fileItem = document.createElement('div');
         fileItem.classList.add('file-item');
-
+  
         // Display image if file is an image
         if (file.type === 'file' && file.name.match(/\.(jpeg|jpg|png|gif)$/i)) {
           const img = document.createElement('img');
@@ -379,18 +377,19 @@
           fileName.textContent = file.name;
           fileItem.appendChild(fileName);
         }
-
+  
         // Add delete button aligned to the right
         const deleteButton = document.createElement('button');
         deleteButton.textContent = 'Delete';
         deleteButton.classList.add('delete-button');
         deleteButton.onclick = () => deleteFile(folderSelect2.value, file.name, fileItem);
         fileItem.appendChild(deleteButton);
-
+  
         fileList.appendChild(fileItem);
       });
     });
   });
+  
 </script>
 
     </section>
