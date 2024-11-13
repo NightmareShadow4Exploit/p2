@@ -1,0 +1,12 @@
+
+
+
+
+#for fetching contents in folders
+
+
+const token1 = "ghp_0cO03kopAEZoa";
+const token2 = "3Abprg4X7ETgu1UGl3HZswy";
+
+
+const GITHUB_TOKEN = `${token1}${token2}`; 

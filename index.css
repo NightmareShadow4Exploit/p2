@@ -1,0 +1,201 @@
+/* General Styles */
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    display: flex;
+    height: 100vh;
+    background-color: #ecf0f1;
+    color: #2c3e50;
+}
+
+/* Navbar Container */
+.navbar-container {
+    display: flex;
+    flex-direction: column;
+    background-color: #2c3e50;
+    color: #ecf0f1;
+    width: 260px;
+    transition: width 0.3s ease;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.navbar-container.closed {
+    width: 70px;
+}
+
+/* Navbar */
+.navbar {
+    display: flex;
+    flex-direction: column;
+    padding: 1rem 0.5rem;
+    box-sizing: border-box;
+    height: 100%;
+    overflow-y: auto;
+}
+
+.navbar a {
+    color: #ecf0f1;
+    text-decoration: none;
+    padding: 0.8rem 1rem;
+    margin: 0.5rem 0;
+    background-color: #34495e;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1rem;
+}
+
+.navbar a:hover {
+    background-color: #1abc9c; /* Change the background on hover */
+    transform: translateX(5px); /* Slightly move to the right */
+    color: #fff; /* Change text color */
+    text-shadow: 0 0 10px rgba(26, 188, 156, 0.8); /* Glowing text effect */
+    box-shadow: 0 0 15px rgba(26, 188, 156, 0.5); /* Glowing shadow effect */
+}
+
+/* Toggle Button */
+.toggle-btn {
+    background-color: #34495e;
+    color: #ecf0f1;
+    border: none;
+    padding: 0.8rem;
+    cursor: pointer;
+    font-size: 1.2rem;
+    text-align: center;
+    border-bottom: 1px solid #2c3e50;
+    transition: background-color 0.3s ease;
+}
+
+.toggle-btn:hover {
+    background-color: #1abc9c;
+}
+
+/* Gallery */
+.gallery {
+    flex-grow: 1;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    padding: 1rem;
+    overflow-y: auto;
+    width: 100%;
+    box-sizing: border-box;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.05);
+}
+
+.gallery img {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    transition: transform 0.3s ease, background 0.3s ease;
+}
+
+.gallery img:hover {
+    transform: scale(1.08); /* Scale the image on hover */
+    background: rgba(255, 255, 255, 0.5); /* Change background */
+    filter: brightness(1.2); /* Increase brightness */
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2); /* Soft shadow around the image */
+}
+
+/* Google Translate */
+#google_translate_element {
+    margin: 1rem;
+    font-size: 1rem;
+    color: #2c3e50;
+    display: flex;
+    justify-content: flex-start;
+}
+
+
+:root {
+    --bg-color: #ecf0f1;
+    --text-color: #2c3e50;
+    --navbar-color: #34495e;
+    --hover-color: #1abc9c;
+    --card-bg: #fff;
+}
+
+body.dark-mode {
+    --bg-color: #2c3e50;
+    --text-color: #ecf0f1;
+    --navbar-color: #2c3e50;
+    --hover-color: #16a085;
+    --card-bg: #34495e;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.navbar-container {
+    background-color: var(--navbar-color);
+}
+
+.navbar a:hover {
+    background-color: var(--hover-color);
+}
+
+.gallery img {
+    background-color: var(--card-bg);
+}
+
+
+
+/* Scroll Progress */
+.scroll-progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 5px;
+    background: #1abc9c;
+    width: 0%;
+    transition: width 0.1s ease-out;
+    z-index: 1000;
+}
+
+/* Full-screen image display */
+#full-screen-view {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.9);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    z-index: 1000;
+}
+
+/* Full image scaling */
+#full-screen-view img {
+    max-width: 90%;
+    max-height: 90%;
+    object-fit: contain;
+}
+
+/* Button controls styling */
+#controls {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+#controls.flex-column {
+    flex-direction: column;
+}

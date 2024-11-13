@@ -3,9 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hadis Graph</title>
+    <title>Hadith Poster Gallery</title>
+    <link rel="stylesheet" href="index.css">
 </head>
 <body>
-    <a href="Admin/admin.html">Admin</a>
+    <div class="scroll-progress"></div>
+
+    <button id="toggle-btn">☰</button>
+    <!-- Sidebar Navigation -->
+    <div class="navbar-container" id="navbar-container">
+        <!-- <button class="toggle-btn" id="toggle-btn">☰</button> -->
+        <div id="google_translate_element"></div>
+        <div class="navbar" id="navbar">
+            <!-- Dynamic Links Will Go Here -->
+        </div>
+    </div>
+    <!-- <div id="navbar"></div>  Navbar for folder names -->
+    <div class="gallery" id="gallery"></div> <!-- Gallery of images for each folder -->
+    <div id="full-screen-view" style="display: none;">
+        <img id="full-image" />
+        <div id="controls">
+            <button id="download-btn">Download</button>
+            <button id="share-btn">Share</button>
+        </div>
+    </div>
+    
+    
+    <!-- Footer Section -->
+    
+
+    <script src="index.js"></script>
 </body>
 </html>

@@ -1,0 +1,31 @@
+  /* Style for file items */
+  .file-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 10px 0;
+    padding: 5px;
+    border-bottom: 1px solid #ccc;
+  }
+
+  /* Style for delete button */
+  .delete-button {
+    background-color: red;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+  }
+
+  /* Style for images */
+  .file-image {
+    width: 100px;
+    height: auto;
+  }
+
+  /* Style for search bar */
+  #searchBar {
+    margin-top: 10px;
+    padding: 5px;
+    width: 100%;
+  }

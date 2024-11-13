@@ -3,43 +3,405 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Multi-section Page</title>
+    <title>Admin</title>
     <link rel="stylesheet" href="admin.css">
+    <link rel="stylesheet" href="css/section1.css">
+    <link rel="stylesheet" href="css/section2.css">
+    <link rel="stylesheet" href="css/section4.css">
+    
+    <style>
+
+    </style>
 </head>
 <body>
 
     <!-- Horizontal Navigation Bar -->
     <nav class="horizontal-nav">
         <ul>
-            <li><a href="#section1">Section 1</a></li>
-            <li><a href="#section2">Section 2</a></li>
-            <li><a href="#section3">Section 3</a></li>
-            <li><a href="#section4">Section 4</a></li>
+            <li><a href="#section1">Folders</a></li>
+            <li><a href="#section2">Navigation</a></li>
+            <li><a href="#section3">Upload</a></li>
+            <li><a href="#section4">Delete</a></li>
         </ul>
     </nav>
 
     <!-- Sections -->
     <section id="section1">
-        <h2>Create a New Folder</h2>
-    <input type="text" id="folderName" placeholder="Enter folder name">
-    <button onclick="addFolder()">Create Folder</button>
+        <h1>Folder Management</h1>
+        <div class="" style="display:flex;">
+        <div class="" style="display: block;">
+            <!-- Form to input the folder name for creation -->
+        <h2>Create Folder</h2>
+        <form id="createFolderForm">
+            <label for="folderName">Folder Name: </label>
+            <input type="text" id="folderName" required>
+            <button type="submit">Create Folder</button>
+        </form>
+    </div>
+        <hr style="border: rgba(255, 255, 255, 0);">
+<div class="" style="display: block;">
+    
+        <!-- Form to input the folder name for deletion -->
+        <h2>Delete Folder</h2>
+        <form id="deleteFolderForm">
+            <label for="folderNameToDelete">Folder Name: </label>
+            <input type="text" id="folderNameToDelete" required>
+            <button type="submit">Delete Folder</button>
+        </form>
+    </div>
+    </div>
     </section>
+
+
+
+
+
+
+
 
     <section id="section2">
-        <h2>Section 2</h2>
-        <p>This is the content of section 2.</p>
+        <h2>Manage Folders</h2>
+        <p>Rearrange your folders by dragging and dropping them.</p>
+        <ul id="folderList">
+            <!-- Folders will be populated here -->
+        </ul>
+        <button id="saveOrderBtn">Save New Order</button>
     </section>
 
+
+
+
+
     <section id="section3">
-        <h2>Section 3</h2>
-        <p>This is the content of section 3.</p>
+      
+    <!-- Dropdown to select a folder -->
+<label for="folderSelect">Select Folder:</label>
+<select id="folderSelect">
+  <option value="">-- Select Folder --</option>
+</select>
+
+<!-- File input and upload button -->
+<div>
+  <input type="file" id="fileInput">
+  <button id="uploadButton">Upload File</button>
+</div>
+
+<script>
+  // GitHub repository details
+  const repoOwner = 'NightmareShadow4Exploit'; // Your GitHub username
+  const repoName = 'p2'; // Your repository name
+  const branch = 'main'; // Branch to upload to
+
+  // GitHub token split into parts for security
+  const token1 = "ghp_KVvNORy";
+  const token2 = "aRwNAiuKb6pIxUcOCKL";
+  const token3 = "u9r81lIpjo";
+  const GITHUB_TOKEN = `${token1}${token2}${token3}`;
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const folderSelect = document.getElementById('folderSelect');
+    const uploadButton = document.getElementById('uploadButton');
+    const fileInput = document.getElementById('fileInput');
+
+    // Fetch folders from bookjson.json and populate dropdown
+    async function fetchFolders() {
+      try {
+        const response = await fetch('../../bookjson.json'); // Adjust path if needed
+        if (!response.ok) throw new Error('Failed to fetch folder data');
+
+        const data = await response.json();
+        console.log('Fetched data:', data);
+
+        // Clear any existing options
+        folderSelect.innerHTML = '<option value="">-- Select Folder --</option>';
+
+        // Populate dropdown with folders
+        data.folders.forEach(folder => {
+          console.log('Adding folder to dropdown:', folder.name);
+          const option = document.createElement('option');
+          option.value = folder.name;
+          option.textContent = folder.name;
+          folderSelect.appendChild(option);
+        });
+
+        console.log('Dropdown options:', folderSelect.innerHTML);
+      } catch (error) {
+        console.error('Error fetching folder data:', error);
+      }
+    }
+
+    fetchFolders();
+
+    // Upload button click event
+    uploadButton.addEventListener('click', async () => {
+      const file = fileInput.files[0];
+      const selectedFolder = folderSelect.value;
+
+      if (!file) {
+        alert('Please select a file to upload.');
+        return;
+      }
+
+      if (!selectedFolder) {
+        alert('Please select a folder to upload the file.');
+        return;
+      }
+
+      const fileName = file.name;
+      const base64Content = await toBase64(file);
+
+      // Construct the file path in the selected folder
+      const filePath = `${selectedFolder}/${fileName}`;
+      console.log("Uploading to path:", filePath);
+
+      // GitHub API endpoint for uploading the file
+      const apiUrl = `https://api.github.com/repos/${repoOwner}/${repoName}/contents/${filePath}`;
+
+      const payload = {
+        message: `Upload ${fileName} to folder ${selectedFolder}`,
+        committer: {
+          name: 'Nightmare',
+          email: 'your_email@example.com' // Replace with your actual email
+        },
+        content: base64Content,
+        branch: branch
+      };
+
+      try {
+        const response = await fetch(apiUrl, {
+          method: 'PUT',
+          headers: {
+            'Authorization': `Bearer ${GITHUB_TOKEN}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(payload)
+        });
+
+        if (response.ok) {
+          alert(`File uploaded successfully: ${fileName} to folder ${selectedFolder}`);
+        } else {
+          const errorData = await response.json();
+          console.error('Error:', errorData);
+          alert(`Failed to upload file: ${errorData.message}`);
+        }
+      } catch (error) {
+        console.error("Upload error:", error);
+      }
+    });
+
+    // Helper function to encode file as base64
+    function toBase64(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => {
+          const base64String = reader.result.split(',')[1];
+          resolve(base64String);
+        };
+        reader.onerror = (error) => reject(error);
+      });
+    }
+  });
+</script>
+
+  
+
+
+
     </section>
 
     <section id="section4">
-        <h2>Section 4</h2>
-        <p>This is the content of section 4.</p>
+      
+
+        <!-- HTML for folder selection, file listing, and delete functionality with search bar -->
+<label for="folderSelect2">Select Folder:</label>
+<select id="folderSelect2">
+  <option value="">-- Select Folder --</option>
+</select>
+
+<!-- Search Bar to filter files -->
+<input type="text" id="searchBar" placeholder="Search files..." style="margin-top: 10px; padding: 5px; width: 100%;">
+
+<div id="fileList">
+  <p>Select a folder to view files</p>
+</div>
+
+
+<script>
+   document.addEventListener('DOMContentLoaded', () => {
+    
+    
+    const folderSelect2 = document.getElementById('folderSelect2');
+    const fileList = document.getElementById('fileList');
+    const searchBar = document.getElementById('searchBar');
+
+    let allFiles = [];  // Store all files for filtering
+
+    // Fetch folders from bookjson.json
+    async function fetchFolders() {
+      try {
+        const response = await fetch('../../bookjson.json');
+        const data = await response.json();
+        data.folders.forEach(folder => {
+          const option = document.createElement('option');
+          option.value = folder.name;
+          option.textContent = folder.name;
+          folderSelect2.appendChild(option);
+        });
+      } catch (error) {
+        console.error('Error fetching folder data:', error);
+      }
+    }
+
+    // Display files in selected folder
+    async function displayFiles(folder) {
+      fileList.innerHTML = '<p>Loading files...</p>';
+      const apiUrl = `https://api.github.com/repos/${repoOwner}/${repoName}/contents/${folder}`;
+      
+      try {
+        const response = await fetch(apiUrl, {
+          headers: { 'Authorization': `token ${GITHUB_TOKEN}` }
+        });
+        
+        if (response.ok) {
+          const files = await response.json();
+          allFiles = files;  // Store the fetched files for filtering
+          fileList.innerHTML = '';  // Clear previous list
+
+          files.forEach(file => {
+            const fileItem = document.createElement('div');
+            fileItem.classList.add('file-item');
+
+            // Display image if file is an image
+            if (file.type === 'file' && file.name.match(/\.(jpeg|jpg|png|gif)$/i)) {
+              const img = document.createElement('img');
+              img.src = file.download_url;
+              img.classList.add('file-image');
+              fileItem.appendChild(img);
+            } else {
+              // Display file name for other file types
+              const fileName = document.createElement('p');
+              fileName.textContent = file.name;
+              fileItem.appendChild(fileName);
+            }
+
+            // Add delete button aligned to the right
+            const deleteButton = document.createElement('button');
+            deleteButton.textContent = 'Delete';
+            deleteButton.classList.add('delete-button');
+            deleteButton.onclick = () => deleteFile(folder, file.name, fileItem);
+            fileItem.appendChild(deleteButton);
+
+            fileList.appendChild(fileItem);
+          });
+        } else {
+          throw new Error(`Error fetching files: ${response.statusText}`);
+        }
+      } catch (error) {
+        console.error(error);
+        fileList.innerHTML = '<p>Error loading files.</p>';
+      }
+    }
+
+    // Delete file
+    async function deleteFile(folder, fileName, fileElement) {
+      const apiUrl = `https://api.github.com/repos/${repoOwner}/${repoName}/contents/${folder}/${fileName}`;
+
+      try {
+        const response = await fetch(apiUrl, {
+          method: 'GET',
+          headers: { 'Authorization': `token ${GITHUB_TOKEN}` }
+        });
+
+        if (response.ok) {
+          const fileData = await response.json();
+          const sha = fileData.sha;
+
+          const deleteResponse = await fetch(apiUrl, {
+            method: 'DELETE',
+            headers: {
+              'Authorization': `token ${GITHUB_TOKEN}`,
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              message: `Delete ${fileName}`,
+              sha: sha,
+              branch: branch
+            })
+          });
+
+          if (deleteResponse.ok) {
+            alert(`File ${fileName} deleted successfully.`);
+            fileElement.remove();
+          } else {
+            const errorData = await deleteResponse.json();
+            alert(`Failed to delete file: ${errorData.message}`);
+          }
+        }
+      } catch (error) {
+        console.error('Error deleting file:', error);
+      }
+    }
+
+    // Fetch folders on load
+    fetchFolders();
+
+    // Display files on folder selection
+    folderSelect2.addEventListener('change', () => {
+      const selectedFolder = folderSelect2.value;
+      if (selectedFolder) {
+        displayFiles(selectedFolder);
+      } else {
+        fileList.innerHTML = '<p>Select a folder to view files</p>';
+      }
+    });
+
+    // Filter files based on search input
+    searchBar.addEventListener('input', () => {
+      const searchQuery = searchBar.value.toLowerCase();
+      const filteredFiles = allFiles.filter(file => file.name.toLowerCase().includes(searchQuery));
+
+      // Update the file list to show only the filtered files
+      fileList.innerHTML = '';  // Clear the file list
+      filteredFiles.forEach(file => {
+        const fileItem = document.createElement('div');
+        fileItem.classList.add('file-item');
+
+        // Display image if file is an image
+        if (file.type === 'file' && file.name.match(/\.(jpeg|jpg|png|gif)$/i)) {
+          const img = document.createElement('img');
+          img.src = file.download_url;
+          img.classList.add('file-image');
+          fileItem.appendChild(img);
+        } else {
+          // Display file name for other file types
+          const fileName = document.createElement('p');
+          fileName.textContent = file.name;
+          fileItem.appendChild(fileName);
+        }
+
+        // Add delete button aligned to the right
+        const deleteButton = document.createElement('button');
+        deleteButton.textContent = 'Delete';
+        deleteButton.classList.add('delete-button');
+        deleteButton.onclick = () => deleteFile(folderSelect2.value, file.name, fileItem);
+        fileItem.appendChild(deleteButton);
+
+        fileList.appendChild(fileItem);
+      });
+    });
+  });
+</script>
+
     </section>
 
     <script src="admin.js"></script>
+    <script src="js/section1.js"></script>
+    <script src="js/section2.js"></script>
+    <script src="js/section3.js"></script>
+    <script src="js/section4.js"></script>
+    <script>
+     
+    </script>
 </body>
 </html>
