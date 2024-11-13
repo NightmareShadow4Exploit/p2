@@ -10,23 +10,19 @@
     },
     {
       "id": 3,
-      "name": "Khuda",
-      "path": "Khuda"
+      "name": "Khuda"
     },
     {
       "id": 4,
-      "name": "Haider",
-      "path": "Haider"
+      "name": "Qamar Chachu"
     },
     {
       "id": 5,
-      "name": "Qayamat",
-      "path": "Qayamat"
+      "name": "Haider"
     },
     {
       "id": 6,
-      "name": "Qamar Chachu",
-      "path": "Qamar%2520Chachu"
+      "name": "Qayamat"
     }
   ]
 }
